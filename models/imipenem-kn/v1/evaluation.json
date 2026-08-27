@@ -1,15 +1,15 @@
 {
-  "accuracy": 0.925,
-  "precision": 0.8846,
-  "recall": 1.0,
-  "f1": 0.9388,
+  "accuracy": 0.9,
+  "precision": 0.88,
+  "recall": 0.9565,
+  "f1": 0.9167,
   "rocAuc": 0.9591,
   "prAuc": 0.9702,
   "confusionMatrix": {
     "trueNegative": 14,
     "falsePositive": 3,
-    "falseNegative": 0,
-    "truePositive": 23,
+    "falseNegative": 1,
+    "truePositive": 22,
     "layout": "rows = actual [Susceptible, Resistant], cols = predicted [Susceptible, Resistant]"
   },
   "testRows": 40,

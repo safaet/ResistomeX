@@ -47,7 +47,7 @@ def _registry():
     return load_registry()
 
 
-@st.cache_resource(show_spinner="Loading model…")
+@st.cache_resource(show_spinner="Loading model (first use may take a few seconds)…")
 def _model(model_id: str):
     return load_model(model_id)
 
@@ -72,46 +72,48 @@ def not_trained_screen(exc: Exception) -> None:
         st.code(str(exc))
 
 
-def sidebar(models) -> tuple[str, bool]:
+def sidebar_pick(models):
+    """Header + model selector only. Returns the chosen ModelInfo."""
     with st.sidebar:
         st.header("🧫 R-Blend AMR Predictor")
         st.caption("Predict resistant / susceptible phenotype from resistance-gene data.")
-
         by_label = {m.label: m for m in models}
         labels = list(by_label)
         default_label = next(
             (m.label for m in models if m.model_id == config.DEFAULT_MODEL_ID), labels[0]
         )
         picked = st.selectbox(
-            "1 · Pathogen – antibiotic",
-            options=labels,
-            index=labels.index(default_label),
+            "1 · Pathogen – antibiotic", options=labels, index=labels.index(default_label)
         )
-        chosen = by_label[picked]
-        m = chosen.metrics
+        return by_label[picked]
+
+
+def sidebar_rest(info, model) -> bool:
+    """Metric caption, template download, example toggle, disclaimer. Returns use_example."""
+    with st.sidebar:
         bits = []
-        if m.get("recall") is not None:
-            bits.append(f"recall {m['recall']:.2f}")
-        if m.get("f1") is not None:
-            bits.append(f"F1 {m['f1']:.2f}")
-        st.caption(f"Held-out {' · '.join(bits)} · n={chosen.total_rows}" if bits else f"n={chosen.total_rows}")
-        if chosen.small_dataset:
+        if info.metrics.get("recall") is not None:
+            bits.append(f"recall {info.metrics['recall']:.2f}")
+        if info.metrics.get("f1") is not None:
+            bits.append(f"F1 {info.metrics['f1']:.2f}")
+        if bits:
+            st.caption(f"Held-out {' · '.join(bits)} · n={info.total_rows}")
+        if info.small_dataset:
             st.caption("⚠️ Small dataset — metrics are low-confidence.")
 
-        schema = _model(chosen.model_id).schema
         st.download_button(
             "2 · Download CSV template",
-            data=csv_template_bytes(schema),
-            file_name=f"{chosen.model_id}_template.csv",
+            data=csv_template_bytes(model.schema),
+            file_name=f"{model.model_id}_template.csv",
             mime="text/csv",
-            use_container_width=True,
-            help=f"{schema.n_features} feature columns + '{schema.identifier_column}', one example row.",
+            width="stretch",
+            help=f"{model.schema.n_features} feature columns + "
+                 f"'{model.schema.identifier_column}', one example row.",
         )
         use_example = st.checkbox("…or use built-in example isolates", value=False)
-
         st.divider()
         st.caption(DISCLAIMER_SHORT)
-        return chosen.model_id, use_example
+        return use_example
 
 
 def input_bytes(model, use_example: bool) -> tuple[bytes | None, str]:
@@ -166,7 +168,7 @@ def results_view(result, model, source_label: str) -> None:
     )
     st.dataframe(
         show,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         column_config={
             "isolateId": "Isolate",
@@ -280,10 +282,21 @@ def main() -> None:
         )
         return
 
-    model_id, use_example = sidebar(models)
-    model = _model(model_id)
+    info = sidebar_pick(models)
+    try:
+        model = _model(info.model_id)
+    except ModelNotTrainedError as exc:
+        st.title("🧫 R-Blend AMR Predictor")
+        st.error(f"Could not load or build the **{info.label}** model.")
+        st.caption(str(exc))
+        st.info("Pick a different pathogen–antibiotic in the sidebar, or run "
+                "`python train.py` locally.")
+        return
+    use_example = sidebar_rest(info, model)
 
     st.title(f"{model.antibiotic} resistance — *{model.pathogen}*")
+    if model.trained_at_runtime:
+        st.caption("ℹ️ This model was built on first use from the bundled dataset.")
     if model.is_synthetic:
         st.warning(
             "⚠️ **SYNTHETIC MODE** — no real dataset was found at training time, so "

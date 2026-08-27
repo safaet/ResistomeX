@@ -145,8 +145,10 @@ def validate_dataframe(df: pd.DataFrame, schema: FeatureSchema) -> ValidationRep
                 f"{coerced_bad} feature cell(s) are not numbers. "
                 "Feature values must be exactly 0 or 1."
             )
-        out_of_range = numeric.where(numeric.notna())
-        bad_vals = int(((out_of_range != 0) & (out_of_range != 1)).sum().sum())
+        # values that parsed as numbers but aren't 0/1 (skip originally-blank
+        # cells — those are already reported as missing above)
+        valued = numeric.notna() & feat.notna()
+        bad_vals = int(((numeric != 0) & (numeric != 1) & valued).sum().sum())
         if bad_vals:
             report.add_error(
                 f"{bad_vals} feature cell(s) hold a value other than 0 or 1."

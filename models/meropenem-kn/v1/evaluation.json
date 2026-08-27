@@ -1,15 +1,15 @@
 {
-  "accuracy": 0.9375,
-  "precision": 0.875,
-  "recall": 1.0,
-  "f1": 0.9333,
-  "rocAuc": 0.9594,
-  "prAuc": 0.9374,
+  "accuracy": 0.9167,
+  "precision": 0.8696,
+  "recall": 0.9524,
+  "f1": 0.9091,
+  "rocAuc": 0.9612,
+  "prAuc": 0.9421,
   "confusionMatrix": {
     "trueNegative": 24,
     "falsePositive": 3,
-    "falseNegative": 0,
-    "truePositive": 21,
+    "falseNegative": 1,
+    "truePositive": 20,
     "layout": "rows = actual [Susceptible, Resistant], cols = predicted [Susceptible, Resistant]"
   },
   "testRows": 48,

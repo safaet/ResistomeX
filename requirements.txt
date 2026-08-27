@@ -1,11 +1,21 @@
-# R-Blend AMR Predictor — MVP dependencies
-# Versions pinned to the research notebook's environment
-# (Resistance_Gene_AMR_Prediction_v5, "Library Versions" cell) where listed.
+# R-Blend AMR Predictor — dependencies
+#
+# Ranges (not exact pins) so the set resolves on whatever Python the host runs
+# (Streamlit Community Cloud currently uses 3.11–3.13). Exact pins to the
+# research-notebook versions build fine locally on Python 3.12 but:
+#   * numpy 2.0.2 / pandas 2.2.2 have no cp313 wheels  -> a 3.13 deploy fails
+#   * `xgboost` (GPU build) drags in nvidia-nccl (~200 MB) -> slow / failing
+#     installs on Streamlit Cloud; `xgboost-cpu` is the 6 MB CPU-only wheel with
+#     the same `import xgboost` API.
+#
+# scikit-learn is kept on the 1.6 line for pickle compatibility with the
+# committed model artifacts. If a newer scikit-learn is installed anyway, the
+# app just retrains each model from the bundled CSVs on first use.
 
-streamlit==1.39.0
-scikit-learn==1.6.1
-xgboost==3.2.0
-imbalanced-learn==0.14.1
-pandas==2.2.2
-numpy==2.0.2
-joblib==1.4.2
+streamlit>=1.50
+numpy>=2.1,<3
+pandas>=2.2.3,<3
+scikit-learn>=1.6.1,<1.7
+imbalanced-learn>=0.12,<0.15
+xgboost-cpu>=3.2,<4
+joblib>=1.3,<2

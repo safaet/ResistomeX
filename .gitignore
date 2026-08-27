@@ -17,9 +17,10 @@ venv/
 .idea/
 .vscode/
 
-# --- trained model binary (optional: regenerate with `python train.py`) ---
-# Comment the next line out if you want to version the artifact.
-models/**/*.joblib
+# NOTE: models/**/*.joblib ARE committed so the hosted app has models without a
+# build step. They are small (~140 KB each) and deterministic. If a newer
+# scikit-learn is installed than the one they were pickled with, the app
+# transparently retrains from the bundled CSVs, so a stale binary is harmless.
 
 # --- large unrelated data dump (not used by the app) ---
 Data/2024/
