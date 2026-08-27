@@ -1,0 +1,53 @@
+{
+  "modelId": "ertapenem-ecs",
+  "version": "v1",
+  "modelType": "R-Blend soft-voting ensemble (DecisionTree + LogisticRegression + XGBoost)",
+  "votingWeights": {
+    "DecisionTree": 1.0,
+    "LogisticRegression": 1.5,
+    "XGBoost": 1.0
+  },
+  "pathogen": "Escherichia coli / Shigella",
+  "pathogenCode": "ECS",
+  "antibiotic": "Ertapenem",
+  "positiveClass": "Resistant",
+  "randomState": 42,
+  "baseLearnerRandomState": 0,
+  "testSize": 0.2,
+  "decisionThreshold": 0.5,
+  "totalRows": 129,
+  "trainingRows": 103,
+  "testRows": 26,
+  "classBalance": {
+    "0": 68,
+    "1": 61
+  },
+  "minorityClassCount": 61,
+  "rawFeatureCount": 236,
+  "selectedFeatureCount": 114,
+  "featureSelection": {
+    "anovaPThreshold": 0.3,
+    "xgbCumulativeImportanceCutoffPct": 85,
+    "combine": "union"
+  },
+  "balancing": "SMOTETomek",
+  "split": "stratified",
+  "smallDataset": false,
+  "rbi": {
+    "definition": "min-max normalised row-sum of binary gene/mutation features",
+    "fittedOn": "training split only",
+    "rMin": 2.0,
+    "rMax": 37.0
+  },
+  "dataset": "amr_ast_ertapenem_EcS.csv",
+  "dataMode": "real",
+  "trainedOn": "2026-08-27",
+  "libraries": {
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.2.0",
+    "imbalanced-learn": "0.14.1",
+    "numpy": "2.0.2",
+    "pandas": "2.2.2"
+  },
+  "python": "3.12.3"
+}

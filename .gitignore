@@ -1,0 +1,28 @@
+# --- real research data (never commit) ---
+data/raw/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# --- Streamlit ---
+.streamlit/secrets.toml
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/
+
+# --- trained model binary (optional: regenerate with `python train.py`) ---
+# Comment the next line out if you want to version the artifact.
+models/**/*.joblib
+
+# --- large unrelated data dump (not used by the app) ---
+Data/2024/
+
+# --- editor/tool ---
+.qodo/

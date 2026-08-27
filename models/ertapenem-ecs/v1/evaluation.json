@@ -1,0 +1,20 @@
+{
+  "accuracy": 0.9615,
+  "precision": 1.0,
+  "recall": 0.9167,
+  "f1": 0.9565,
+  "rocAuc": 0.9702,
+  "prAuc": 0.9755,
+  "confusionMatrix": {
+    "trueNegative": 14,
+    "falsePositive": 0,
+    "falseNegative": 1,
+    "truePositive": 11,
+    "layout": "rows = actual [Susceptible, Resistant], cols = predicted [Susceptible, Resistant]"
+  },
+  "testRows": 26,
+  "positiveLabel": 1,
+  "decisionThreshold": 0.5,
+  "split": "stratified",
+  "note": "Single random hold-out split, phylogeny-naive. Treat metrics as an optimistic upper bound (see docs/intended-use.md)."
+}
