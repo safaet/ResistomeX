@@ -106,7 +106,7 @@ def sidebar_rest(info, model) -> bool:
             data=csv_template_bytes(model.schema),
             file_name=f"{model.model_id}_template.csv",
             mime="text/csv",
-            width="stretch",
+            use_container_width=True,
             help=f"{model.schema.n_features} feature columns + "
                  f"'{model.schema.identifier_column}', one example row.",
         )
@@ -168,7 +168,7 @@ def results_view(result, model, source_label: str) -> None:
     )
     st.dataframe(
         show,
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
         column_config={
             "isolateId": "Isolate",
@@ -330,4 +330,17 @@ def main() -> None:
     details_expander(model)
 
 
-main()
+try:
+    main()
+except Exception as exc:  # noqa: BLE001 — never leave the user with a blank page
+    import traceback
+
+    st.title("🧫 R-Blend AMR Predictor")
+    st.error(f"The app hit an unexpected error: {type(exc).__name__}: {exc}")
+    st.caption(
+        "If you just deployed, make sure dependencies installed from "
+        "`requirements.txt`. Locally, run `python train.py` once, then "
+        "`streamlit run app.py`."
+    )
+    with st.expander("Full traceback"):
+        st.code("".join(traceback.format_exc()))
