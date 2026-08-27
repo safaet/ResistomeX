@@ -1,5 +1,7 @@
 # R-Blend AMR Predictor — Streamlit app
 
+**Live demo: <https://resistomex.streamlit.app/>**
+
 A single, self-contained **Streamlit** app that proves the end-to-end
 antimicrobial-resistance (AMR) prediction workflow:
 
@@ -95,6 +97,8 @@ Plus a top-level **`models/registry.json`** listing every model, and demo CSVs
 `data/samples/<model_id>_{valid,invalid}_input.csv`.
 
 ## Run
+
+Use the hosted instance at <https://resistomex.streamlit.app/>, or run locally:
 
 ```bash
 streamlit run app.py
