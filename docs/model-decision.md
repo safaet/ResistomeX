@@ -55,17 +55,28 @@ Confirmed with the owner on 2026-08-27:
 1. **RBI min/max fitted on train only** (notebook fitted on full data → leakage).
    Mandated by the product plan (Week 3) and the task brief.
 2. **`use_label_encoder=` argument dropped** from `XGBClassifier` — it was
-   removed in XGBoost ≥ 2.0 and raises under the pinned `xgboost==3.2.0`.
-   Behaviour is unchanged (labels are already 0/1).
+   removed in XGBoost ≥ 2.0 and raises under a 3.x `xgboost`. Behaviour is
+   unchanged (labels are already 0/1).
 3. No Google Drive / Colab paths anywhere.
+4. **Deps are ranges, not exact pins**, and use `xgboost-cpu` — see
+   `requirements.txt` for why (Python-3.13 wheels; avoiding the ~200 MB
+   `nvidia-nccl` pulled by the GPU `xgboost` build). `scikit-learn` stays on the
+   1.6 line for pickle compatibility with the committed artifacts; a
+   version mismatch triggers an automatic in-process retrain from the bundled
+   CSV (`src/predict.load_model` → `src/training.train_model`).
 
 ## As trained (2026-08-27, real data — all 12)
 
+Environment: scikit-learn 1.6.1, xgboost 3.4.1, imbalanced-learn 0.14.2,
+numpy 2.5.2, pandas 2.3.3, Python 3.12. Metrics shift by a point or two with the
+xgboost minor version — that is expected, and each model's stored metrics always
+match the environment that produced it (including a runtime retrain).
+
 `meropenem-kn` (the default): 238 isolates, class balance {susceptible 132,
 resistant 106}, 190 train / 48 test (stratified, seed 42 — matches the paper's
-F1-CI table n = 48), 112 features kept, RBI bounds `r_min = 3` / `r_max = 29`,
-SMOTETomek 190 → 204 rows. Hold-out: **accuracy 0.938 · precision 0.875 · recall
-1.000 · F1 0.933 · ROC-AUC 0.959 · PR-AUC 0.937** (TN 24 / FP 3 / FN 0 / TP 21).
+F1-CI table n = 48), 109 features kept, RBI bounds `r_min = 3` / `r_max = 29`.
+Hold-out: **accuracy 0.917 · precision 0.870 · recall 0.952 · F1 0.909 ·
+ROC-AUC 0.961 · PR-AUC 0.942** (TN 24 / FP 3 / FN 1 / TP 20).
 
 All 12 (hold-out recall / F1):
 
@@ -76,13 +87,13 @@ All 12 (hold-out recall / F1):
 | doripenem-kn | 316 | 0.980 | 0.970 | |
 | doripenem-pa | 44 | 1.000 | 1.000 | small |
 | ertapenem-ecs | 129 | 0.917 | 0.957 | |
-| ertapenem-kn | 181 | 0.944 | 0.944 | |
+| ertapenem-kn | 181 | 0.889 | 0.889 | |
 | imipenem-ecs | 64 | 1.000 | 1.000 | |
-| imipenem-kn | 200 | 1.000 | 0.939 | |
+| imipenem-kn | 200 | 0.957 | 0.917 | |
 | kanamycin-se | 991 | 0.909 | 0.947 | |
 | meropenem-ecs | 91 | 1.000 | 0.947 | |
-| meropenem-kn | 238 | 1.000 | 0.933 | default |
-| streptomycin-se | 1042 | 0.982 | 0.939 | |
+| meropenem-kn | 238 | 0.952 | 0.909 | default |
+| streptomycin-se | 1042 | 0.982 | 0.935 | |
 
 Each is a single small hold-out split with a phylogeny-naive partition — treat as
 an optimistic upper bound (see `docs/intended-use.md`). Live values are always in

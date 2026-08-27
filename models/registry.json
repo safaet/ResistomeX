@@ -2,6 +2,13 @@
   "generatedOn": "2026-08-27",
   "modelVersion": "v1",
   "defaultModelId": "meropenem-kn",
+  "libraries": {
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.4.1",
+    "imbalanced-learn": "0.14.2",
+    "numpy": "2.5.2",
+    "pandas": "2.3.3"
+  },
   "hyperparameters": {
     "ensemble": "soft-voting DecisionTree + LogisticRegression(1.5x) + XGBoost",
     "randomState": 42,
@@ -19,17 +26,17 @@
       "antibiotic": "Clindamycin",
       "dataset": "amr_ast_clindamycin_CJ.csv",
       "dataMode": "real",
-      "totalRows": 26,
-      "rawFeatureCount": 42,
       "status": "trained",
       "version": "v1",
+      "totalRows": 26,
       "trainingRows": 20,
       "testRows": 6,
+      "rawFeatureCount": 42,
+      "selectedFeatureCount": 11,
       "classBalance": {
         "0": 18,
         "1": 8
       },
-      "selectedFeatureCount": 11,
       "smallDataset": true,
       "metrics": {
         "accuracy": 1.0,
@@ -46,24 +53,24 @@
       "antibiotic": "Doripenem",
       "dataset": "amr_ast_doripenem_EcS.csv",
       "dataMode": "real",
-      "totalRows": 49,
-      "rawFeatureCount": 236,
       "status": "trained",
       "version": "v1",
+      "totalRows": 49,
       "trainingRows": 39,
       "testRows": 10,
+      "rawFeatureCount": 236,
+      "selectedFeatureCount": 50,
       "classBalance": {
         "1": 25,
         "0": 24
       },
-      "selectedFeatureCount": 50,
       "smallDataset": true,
       "metrics": {
         "accuracy": 0.9,
         "precision": 1.0,
         "recall": 0.8,
         "f1": 0.8889,
-        "rocAuc": 0.84
+        "rocAuc": 0.88
       }
     },
     {
@@ -73,17 +80,17 @@
       "antibiotic": "Doripenem",
       "dataset": "amr_ast_doripenem_KN.csv",
       "dataMode": "real",
-      "totalRows": 316,
-      "rawFeatureCount": 324,
       "status": "trained",
       "version": "v1",
+      "totalRows": 316,
       "trainingRows": 252,
       "testRows": 64,
+      "rawFeatureCount": 324,
+      "selectedFeatureCount": 93,
       "classBalance": {
         "1": 241,
         "0": 75
       },
-      "selectedFeatureCount": 94,
       "smallDataset": false,
       "metrics": {
         "accuracy": 0.9531,
@@ -100,17 +107,17 @@
       "antibiotic": "Doripenem",
       "dataset": "amr_ast_doripenem_PA.csv",
       "dataMode": "real",
-      "totalRows": 44,
-      "rawFeatureCount": 164,
       "status": "trained",
       "version": "v1",
+      "totalRows": 44,
       "trainingRows": 35,
       "testRows": 9,
+      "rawFeatureCount": 164,
+      "selectedFeatureCount": 30,
       "classBalance": {
         "0": 22,
         "1": 22
       },
-      "selectedFeatureCount": 30,
       "smallDataset": true,
       "metrics": {
         "accuracy": 1.0,
@@ -127,24 +134,24 @@
       "antibiotic": "Ertapenem",
       "dataset": "amr_ast_ertapenem_EcS.csv",
       "dataMode": "real",
-      "totalRows": 129,
-      "rawFeatureCount": 236,
       "status": "trained",
       "version": "v1",
+      "totalRows": 129,
       "trainingRows": 103,
       "testRows": 26,
+      "rawFeatureCount": 236,
+      "selectedFeatureCount": 114,
       "classBalance": {
         "0": 68,
         "1": 61
       },
-      "selectedFeatureCount": 114,
       "smallDataset": false,
       "metrics": {
         "accuracy": 0.9615,
         "precision": 1.0,
         "recall": 0.9167,
         "f1": 0.9565,
-        "rocAuc": 0.9702
+        "rocAuc": 0.9405
       }
     },
     {
@@ -154,24 +161,24 @@
       "antibiotic": "Ertapenem",
       "dataset": "amr_ast_ertapenem_KN.csv",
       "dataMode": "real",
-      "totalRows": 181,
-      "rawFeatureCount": 324,
       "status": "trained",
       "version": "v1",
+      "totalRows": 181,
       "trainingRows": 144,
       "testRows": 37,
+      "rawFeatureCount": 324,
+      "selectedFeatureCount": 95,
       "classBalance": {
         "0": 91,
         "1": 90
       },
-      "selectedFeatureCount": 95,
       "smallDataset": false,
       "metrics": {
-        "accuracy": 0.9459,
-        "precision": 0.9444,
-        "recall": 0.9444,
-        "f1": 0.9444,
-        "rocAuc": 0.9766
+        "accuracy": 0.8919,
+        "precision": 0.8889,
+        "recall": 0.8889,
+        "f1": 0.8889,
+        "rocAuc": 0.9561
       }
     },
     {
@@ -181,17 +188,17 @@
       "antibiotic": "Imipenem",
       "dataset": "amr_ast_imipenem_EcS.csv",
       "dataMode": "real",
-      "totalRows": 64,
-      "rawFeatureCount": 236,
       "status": "trained",
       "version": "v1",
+      "totalRows": 64,
       "trainingRows": 51,
       "testRows": 13,
+      "rawFeatureCount": 236,
+      "selectedFeatureCount": 65,
       "classBalance": {
         "1": 37,
         "0": 27
       },
-      "selectedFeatureCount": 65,
       "smallDataset": false,
       "metrics": {
         "accuracy": 1.0,
@@ -208,23 +215,23 @@
       "antibiotic": "Imipenem",
       "dataset": "amr_ast_imipenem_KN.csv",
       "dataMode": "real",
-      "totalRows": 200,
-      "rawFeatureCount": 324,
       "status": "trained",
       "version": "v1",
+      "totalRows": 200,
       "trainingRows": 160,
       "testRows": 40,
+      "rawFeatureCount": 324,
+      "selectedFeatureCount": 121,
       "classBalance": {
         "1": 113,
         "0": 87
       },
-      "selectedFeatureCount": 121,
       "smallDataset": false,
       "metrics": {
-        "accuracy": 0.925,
-        "precision": 0.8846,
-        "recall": 1.0,
-        "f1": 0.9388,
+        "accuracy": 0.9,
+        "precision": 0.88,
+        "recall": 0.9565,
+        "f1": 0.9167,
         "rocAuc": 0.9591
       }
     },
@@ -235,17 +242,17 @@
       "antibiotic": "Kanamycin",
       "dataset": "amr_ast_kanamycin_SE.csv",
       "dataMode": "real",
-      "totalRows": 991,
-      "rawFeatureCount": 179,
       "status": "trained",
       "version": "v1",
+      "totalRows": 991,
       "trainingRows": 792,
       "testRows": 199,
+      "rawFeatureCount": 179,
+      "selectedFeatureCount": 48,
       "classBalance": {
         "0": 498,
         "1": 493
       },
-      "selectedFeatureCount": 48,
       "smallDataset": false,
       "metrics": {
         "accuracy": 0.9497,
@@ -262,17 +269,17 @@
       "antibiotic": "Meropenem",
       "dataset": "amr_ast_meropenem_EcS.csv",
       "dataMode": "real",
-      "totalRows": 91,
-      "rawFeatureCount": 236,
       "status": "trained",
       "version": "v1",
+      "totalRows": 91,
       "trainingRows": 72,
       "testRows": 19,
+      "rawFeatureCount": 236,
+      "selectedFeatureCount": 69,
       "classBalance": {
         "0": 46,
         "1": 45
       },
-      "selectedFeatureCount": 69,
       "smallDataset": false,
       "metrics": {
         "accuracy": 0.9474,
@@ -289,24 +296,24 @@
       "antibiotic": "Meropenem",
       "dataset": "amr_ast_meropenem_KN.csv",
       "dataMode": "real",
-      "totalRows": 238,
-      "rawFeatureCount": 324,
       "status": "trained",
       "version": "v1",
+      "totalRows": 238,
       "trainingRows": 190,
       "testRows": 48,
+      "rawFeatureCount": 324,
+      "selectedFeatureCount": 109,
       "classBalance": {
         "0": 132,
         "1": 106
       },
-      "selectedFeatureCount": 112,
       "smallDataset": false,
       "metrics": {
-        "accuracy": 0.9375,
-        "precision": 0.875,
-        "recall": 1.0,
-        "f1": 0.9333,
-        "rocAuc": 0.9594
+        "accuracy": 0.9167,
+        "precision": 0.8696,
+        "recall": 0.9524,
+        "f1": 0.9091,
+        "rocAuc": 0.9612
       }
     },
     {
@@ -316,23 +323,23 @@
       "antibiotic": "Streptomycin",
       "dataset": "amr_ast_streptomycin_SE.csv",
       "dataMode": "real",
-      "totalRows": 1042,
-      "rawFeatureCount": 179,
       "status": "trained",
       "version": "v1",
+      "totalRows": 1042,
       "trainingRows": 833,
       "testRows": 209,
+      "rawFeatureCount": 179,
+      "selectedFeatureCount": 84,
       "classBalance": {
         "1": 542,
         "0": 500
       },
-      "selectedFeatureCount": 83,
       "smallDataset": false,
       "metrics": {
-        "accuracy": 0.933,
-        "precision": 0.8992,
+        "accuracy": 0.9282,
+        "precision": 0.8917,
         "recall": 0.9817,
-        "f1": 0.9386,
+        "f1": 0.9345,
         "rocAuc": 0.94
       }
     }

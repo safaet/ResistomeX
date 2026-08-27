@@ -44,10 +44,10 @@
   "trainedOn": "2026-08-27",
   "libraries": {
     "scikit-learn": "1.6.1",
-    "xgboost": "3.2.0",
-    "imbalanced-learn": "0.14.1",
-    "numpy": "2.0.2",
-    "pandas": "2.2.2"
+    "xgboost": "3.4.1",
+    "imbalanced-learn": "0.14.2",
+    "numpy": "2.5.2",
+    "pandas": "2.3.3"
   },
   "python": "3.12.3"
 }

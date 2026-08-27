@@ -23,6 +23,7 @@ data differs.
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass, field
 
 import joblib
@@ -141,7 +142,13 @@ class RBlendArtifact:
 
     @staticmethod
     def load(path) -> "RBlendArtifact":
-        return joblib.load(path)
+        with warnings.catch_warnings():
+            # XGBoost prints this when unpickling a booster from an older 3.x
+            # point release. Predictions are unaffected; predict.load_model also
+            # runs a scoring self-check and retrains from source if anything is
+            # genuinely broken.
+            warnings.filterwarnings("ignore", message=".*older version of XGBoost.*")
+            return joblib.load(path)
 
     # ---- inference helpers --------------------------------------------- #
     def build_model_matrix(self, raw_features: pd.DataFrame) -> pd.DataFrame:

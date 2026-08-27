@@ -1,5 +1,7 @@
 # R-Blend AMR Predictor — Streamlit app
 
+**Live demo: <https://resistomex.streamlit.app/>**
+
 A single, self-contained **Streamlit** app that proves the end-to-end
 antimicrobial-resistance (AMR) prediction workflow:
 
@@ -96,6 +98,8 @@ Plus a top-level **`models/registry.json`** listing every model, and demo CSVs
 
 ## Run
 
+Use the hosted instance at <https://resistomex.streamlit.app/>, or run locally:
+
 ```bash
 streamlit run app.py
 ```
@@ -108,6 +112,21 @@ valid — renders summary metric cards, a per-isolate table
 resistanceGeneCount`, with text labels + icons, not colour alone) and a
 **Download results** button. An expandable panel shows the RBI explanation, that
 model's metrics + confusion matrix, and the limitations.
+
+## Deploy (Streamlit Community Cloud)
+
+Point a new app at this repo, `app.py`, on the `main` branch. No secrets, no
+`packages.txt` needed.
+
+- `requirements.txt` uses **version ranges**, not exact pins, so it resolves on
+  the deploy Python (3.11–3.13). Exact pins to the notebook versions fail on
+  Python 3.13 (`numpy==2.0.2` / `pandas==2.2.2` have no 3.13 wheels).
+- It depends on **`xgboost-cpu`** (6 MB), not `xgboost` — the GPU build pulls
+  `nvidia-nccl` (~200 MB) and makes the install slow or fail on Cloud.
+- The 12 `model.joblib` files are **committed** (~140 KB each) so the app has
+  models with no build step. If a newer scikit-learn than they were pickled with
+  is installed, the app **retrains that model from the bundled CSV on first use**
+  (a few seconds, cached) — so it is self-healing either way.
 
 ## Input format
 

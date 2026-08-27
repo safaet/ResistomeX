@@ -3,8 +3,8 @@
   "precision": 1.0,
   "recall": 0.9167,
   "f1": 0.9565,
-  "rocAuc": 0.9702,
-  "prAuc": 0.9755,
+  "rocAuc": 0.9405,
+  "prAuc": 0.9621,
   "confusionMatrix": {
     "trueNegative": 14,
     "falsePositive": 0,

@@ -2,12 +2,16 @@
 Inference: pick a model -> validated upload -> RBI -> R-Blend -> results + summary.
 
 The app loads the registry once, then loads individual model artifacts on demand
-(cached). Every model shares the same pipeline; only the data / schema differ.
+(cached). If a `model.joblib` is missing or cannot be unpickled (e.g. on
+Streamlit Cloud, where the binaries may be absent or were pickled by another
+library version), the model is trained in-process from its source CSV in
+`Data/Read Data/` and — when the filesystem is writable — persisted.
 """
 
 from __future__ import annotations
 
 import json
+import warnings
 from dataclasses import dataclass
 
 import pandas as pd
@@ -19,7 +23,7 @@ from .validation import ValidationReport, validate_upload
 
 
 class ModelNotTrainedError(FileNotFoundError):
-    """Raised when a model artifact / the registry is missing — run train.py."""
+    """Raised when no model artifact exists and no source CSV can be found to train one."""
 
 
 # --------------------------------------------------------------------------- #
@@ -37,11 +41,11 @@ class ModelInfo:
 
     @property
     def label(self) -> str:
-        return f"{self.pathogen} — {self.antibiotic}"
+        return f"{self.pathogen} — {self.antibiotic}" if self.antibiotic else self.pathogen
 
     @property
     def is_usable(self) -> bool:
-        return self.status == "trained"
+        return self.status in ("trained", "available")
 
 
 def _read_json(path) -> dict:
@@ -51,11 +55,41 @@ def _read_json(path) -> dict:
         return json.load(fh)
 
 
+def _registry_from_discovery() -> list[ModelInfo]:
+    """No registry.json: derive the model list straight from the dataset files."""
+    out: list[ModelInfo] = []
+    for d in config.SOURCE_DATA_DIRS:
+        if not d.exists():
+            continue
+        for csv in sorted(d.glob("*.csv")):
+            if csv.parent.name == ".ipynb_checkpoints":
+                continue
+            info = config.parse_dataset_name(csv)
+            out.append(ModelInfo(
+                model_id=info["model_id"],
+                pathogen=info["pathogen"],
+                antibiotic=info["antibiotic"],
+                status="available",          # not trained yet, but trainable on demand
+                small_dataset=False,
+                total_rows=0,
+                metrics={},
+            ))
+    # dedupe by model_id
+    seen: dict[str, ModelInfo] = {}
+    for mi in out:
+        seen.setdefault(mi.model_id, mi)
+    return list(seen.values())
+
+
 def load_registry() -> list[ModelInfo]:
     reg = _read_json(config.REGISTRY_PATH)
     if not reg:
+        discovered = _registry_from_discovery()
+        if discovered:
+            return discovered
         raise ModelNotTrainedError(
-            f"No model registry at {config.REGISTRY_PATH}. Run `python train.py` first."
+            f"No model registry at {config.REGISTRY_PATH} and no datasets found in "
+            f"{', '.join(str(d) for d in config.SOURCE_DATA_DIRS)}. Run `python train.py`."
         )
     out = []
     for m in reg.get("models", []):
@@ -73,7 +107,6 @@ def load_registry() -> list[ModelInfo]:
 
 def usable_models() -> list[ModelInfo]:
     models = [m for m in load_registry() if m.is_usable]
-    # default model first, then alphabetical
     models.sort(key=lambda m: (m.model_id != config.DEFAULT_MODEL_ID, m.label))
     return models
 
@@ -88,6 +121,7 @@ class LoadedModel:
     schema: FeatureSchema
     metadata: dict
     evaluation: dict
+    trained_at_runtime: bool = False
 
     @property
     def is_synthetic(self) -> bool:
@@ -106,19 +140,72 @@ class LoadedModel:
         return self.metadata.get("antibiotic", "")
 
 
+def _train_on_demand(model_id: str) -> LoadedModel:
+    from .training import train_model
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")  # ANOVA constant-feature / lbfgs notices
+        artifact, schema, metadata, evaluation = train_model(model_id, data_mode="real")
+
+    # Best-effort persist (filesystem may be read-only on some hosts).
+    try:
+        schema.save(config.feature_schema_path(model_id))
+        artifact.save(config.artifact_path(model_id))
+        _write_json_safe(config.metadata_path(model_id), metadata)
+        _write_json_safe(config.evaluation_path(model_id), evaluation)
+    except OSError:
+        pass
+
+    return LoadedModel(
+        model_id=model_id, artifact=artifact, schema=schema,
+        metadata=metadata, evaluation=evaluation, trained_at_runtime=True,
+    )
+
+
+def _self_check(model: "LoadedModel") -> None:
+    """Score one all-zero isolate to prove the pickled pipeline still runs."""
+    row = pd.DataFrame([[0] * model.schema.n_features], columns=model.schema.feature_columns)
+    model.artifact.predict_frame(row)
+
+
+def _write_json_safe(path, obj) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, indent=2)
+        fh.write("\n")
+
+
 def load_model(model_id: str) -> LoadedModel:
     art_path = config.artifact_path(model_id)
-    if not art_path.exists():
+    if art_path.exists():
+        try:
+            with warnings.catch_warnings():
+                # A library-version mismatch on the pickle is a hard signal to
+                # retrain; other warnings are harmless.
+                try:
+                    from sklearn.exceptions import InconsistentVersionWarning
+                    warnings.simplefilter("error", InconsistentVersionWarning)
+                except Exception:  # noqa: BLE001
+                    pass
+                artifact = RBlendArtifact.load(art_path)
+            model = LoadedModel(
+                model_id=model_id,
+                artifact=artifact,
+                schema=FeatureSchema.load_for(model_id),
+                metadata=_read_json(config.metadata_path(model_id)),
+                evaluation=_read_json(config.evaluation_path(model_id)),
+            )
+            # Sanity check: the loaded pipeline must actually score a row.
+            _self_check(model)
+            return model
+        except Exception:  # noqa: BLE001 — any load/scoring failure => retrain from source
+            pass
+    try:
+        return _train_on_demand(model_id)
+    except FileNotFoundError as exc:
         raise ModelNotTrainedError(
-            f"No model artifact at {art_path}. Run `python train.py` first."
-        )
-    return LoadedModel(
-        model_id=model_id,
-        artifact=RBlendArtifact.load(art_path),
-        schema=FeatureSchema.load_for(model_id),
-        metadata=_read_json(config.metadata_path(model_id)),
-        evaluation=_read_json(config.evaluation_path(model_id)),
-    )
+            f"No artifact for '{model_id}' and no source CSV to train from: {exc}"
+        ) from exc
 
 
 # --------------------------------------------------------------------------- #
@@ -169,11 +256,7 @@ def predict_from_clean_frame(
         }
     )[list(config.RESULT_COLUMNS)]
 
-    return PredictionResult(
-        results=results,
-        summary=_summarise(results),
-        model_version=model.version,
-    )
+    return PredictionResult(results=results, summary=_summarise(results), model_version=model.version)
 
 
 def predict(raw_csv_bytes: bytes, model: LoadedModel) -> tuple[ValidationReport, PredictionResult | None]:
