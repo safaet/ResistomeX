@@ -1,0 +1,340 @@
+{
+  "generatedOn": "2026-08-27",
+  "modelVersion": "v1",
+  "defaultModelId": "meropenem-kn",
+  "hyperparameters": {
+    "ensemble": "soft-voting DecisionTree + LogisticRegression(1.5x) + XGBoost",
+    "randomState": 42,
+    "testSize": 0.2,
+    "anovaPThreshold": 0.3,
+    "xgbImportanceCutoffPct": 85,
+    "balancing": "adaptive SMOTETomek",
+    "decisionThreshold": 0.5
+  },
+  "models": [
+    {
+      "modelId": "clindamycin-cj",
+      "pathogen": "Campylobacter jejuni",
+      "pathogenCode": "CJ",
+      "antibiotic": "Clindamycin",
+      "dataset": "amr_ast_clindamycin_CJ.csv",
+      "dataMode": "real",
+      "totalRows": 26,
+      "rawFeatureCount": 42,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 20,
+      "testRows": 6,
+      "classBalance": {
+        "0": 18,
+        "1": 8
+      },
+      "selectedFeatureCount": 11,
+      "smallDataset": true,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "rocAuc": 1.0
+      }
+    },
+    {
+      "modelId": "doripenem-ecs",
+      "pathogen": "Escherichia coli / Shigella",
+      "pathogenCode": "ECS",
+      "antibiotic": "Doripenem",
+      "dataset": "amr_ast_doripenem_EcS.csv",
+      "dataMode": "real",
+      "totalRows": 49,
+      "rawFeatureCount": 236,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 39,
+      "testRows": 10,
+      "classBalance": {
+        "1": 25,
+        "0": 24
+      },
+      "selectedFeatureCount": 50,
+      "smallDataset": true,
+      "metrics": {
+        "accuracy": 0.9,
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.8889,
+        "rocAuc": 0.84
+      }
+    },
+    {
+      "modelId": "doripenem-kn",
+      "pathogen": "Klebsiella pneumoniae",
+      "pathogenCode": "KN",
+      "antibiotic": "Doripenem",
+      "dataset": "amr_ast_doripenem_KN.csv",
+      "dataMode": "real",
+      "totalRows": 316,
+      "rawFeatureCount": 324,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 252,
+      "testRows": 64,
+      "classBalance": {
+        "1": 241,
+        "0": 75
+      },
+      "selectedFeatureCount": 94,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9531,
+        "precision": 0.96,
+        "recall": 0.9796,
+        "f1": 0.9697,
+        "rocAuc": 0.9333
+      }
+    },
+    {
+      "modelId": "doripenem-pa",
+      "pathogen": "Pseudomonas aeruginosa",
+      "pathogenCode": "PA",
+      "antibiotic": "Doripenem",
+      "dataset": "amr_ast_doripenem_PA.csv",
+      "dataMode": "real",
+      "totalRows": 44,
+      "rawFeatureCount": 164,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 35,
+      "testRows": 9,
+      "classBalance": {
+        "0": 22,
+        "1": 22
+      },
+      "selectedFeatureCount": 30,
+      "smallDataset": true,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "rocAuc": 1.0
+      }
+    },
+    {
+      "modelId": "ertapenem-ecs",
+      "pathogen": "Escherichia coli / Shigella",
+      "pathogenCode": "ECS",
+      "antibiotic": "Ertapenem",
+      "dataset": "amr_ast_ertapenem_EcS.csv",
+      "dataMode": "real",
+      "totalRows": 129,
+      "rawFeatureCount": 236,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 103,
+      "testRows": 26,
+      "classBalance": {
+        "0": 68,
+        "1": 61
+      },
+      "selectedFeatureCount": 114,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9615,
+        "precision": 1.0,
+        "recall": 0.9167,
+        "f1": 0.9565,
+        "rocAuc": 0.9702
+      }
+    },
+    {
+      "modelId": "ertapenem-kn",
+      "pathogen": "Klebsiella pneumoniae",
+      "pathogenCode": "KN",
+      "antibiotic": "Ertapenem",
+      "dataset": "amr_ast_ertapenem_KN.csv",
+      "dataMode": "real",
+      "totalRows": 181,
+      "rawFeatureCount": 324,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 144,
+      "testRows": 37,
+      "classBalance": {
+        "0": 91,
+        "1": 90
+      },
+      "selectedFeatureCount": 95,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9459,
+        "precision": 0.9444,
+        "recall": 0.9444,
+        "f1": 0.9444,
+        "rocAuc": 0.9766
+      }
+    },
+    {
+      "modelId": "imipenem-ecs",
+      "pathogen": "Escherichia coli / Shigella",
+      "pathogenCode": "ECS",
+      "antibiotic": "Imipenem",
+      "dataset": "amr_ast_imipenem_EcS.csv",
+      "dataMode": "real",
+      "totalRows": 64,
+      "rawFeatureCount": 236,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 51,
+      "testRows": 13,
+      "classBalance": {
+        "1": 37,
+        "0": 27
+      },
+      "selectedFeatureCount": 65,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "rocAuc": 1.0
+      }
+    },
+    {
+      "modelId": "imipenem-kn",
+      "pathogen": "Klebsiella pneumoniae",
+      "pathogenCode": "KN",
+      "antibiotic": "Imipenem",
+      "dataset": "amr_ast_imipenem_KN.csv",
+      "dataMode": "real",
+      "totalRows": 200,
+      "rawFeatureCount": 324,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 160,
+      "testRows": 40,
+      "classBalance": {
+        "1": 113,
+        "0": 87
+      },
+      "selectedFeatureCount": 121,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.925,
+        "precision": 0.8846,
+        "recall": 1.0,
+        "f1": 0.9388,
+        "rocAuc": 0.9591
+      }
+    },
+    {
+      "modelId": "kanamycin-se",
+      "pathogen": "Salmonella enterica",
+      "pathogenCode": "SE",
+      "antibiotic": "Kanamycin",
+      "dataset": "amr_ast_kanamycin_SE.csv",
+      "dataMode": "real",
+      "totalRows": 991,
+      "rawFeatureCount": 179,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 792,
+      "testRows": 199,
+      "classBalance": {
+        "0": 498,
+        "1": 493
+      },
+      "selectedFeatureCount": 48,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9497,
+        "precision": 0.989,
+        "recall": 0.9091,
+        "f1": 0.9474,
+        "rocAuc": 0.964
+      }
+    },
+    {
+      "modelId": "meropenem-ecs",
+      "pathogen": "Escherichia coli / Shigella",
+      "pathogenCode": "ECS",
+      "antibiotic": "Meropenem",
+      "dataset": "amr_ast_meropenem_EcS.csv",
+      "dataMode": "real",
+      "totalRows": 91,
+      "rawFeatureCount": 236,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 72,
+      "testRows": 19,
+      "classBalance": {
+        "0": 46,
+        "1": 45
+      },
+      "selectedFeatureCount": 69,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9474,
+        "precision": 0.9,
+        "recall": 1.0,
+        "f1": 0.9474,
+        "rocAuc": 1.0
+      }
+    },
+    {
+      "modelId": "meropenem-kn",
+      "pathogen": "Klebsiella pneumoniae",
+      "pathogenCode": "KN",
+      "antibiotic": "Meropenem",
+      "dataset": "amr_ast_meropenem_KN.csv",
+      "dataMode": "real",
+      "totalRows": 238,
+      "rawFeatureCount": 324,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 190,
+      "testRows": 48,
+      "classBalance": {
+        "0": 132,
+        "1": 106
+      },
+      "selectedFeatureCount": 112,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.9375,
+        "precision": 0.875,
+        "recall": 1.0,
+        "f1": 0.9333,
+        "rocAuc": 0.9594
+      }
+    },
+    {
+      "modelId": "streptomycin-se",
+      "pathogen": "Salmonella enterica",
+      "pathogenCode": "SE",
+      "antibiotic": "Streptomycin",
+      "dataset": "amr_ast_streptomycin_SE.csv",
+      "dataMode": "real",
+      "totalRows": 1042,
+      "rawFeatureCount": 179,
+      "status": "trained",
+      "version": "v1",
+      "trainingRows": 833,
+      "testRows": 209,
+      "classBalance": {
+        "1": 542,
+        "0": 500
+      },
+      "selectedFeatureCount": 83,
+      "smallDataset": false,
+      "metrics": {
+        "accuracy": 0.933,
+        "precision": 0.8992,
+        "recall": 0.9817,
+        "f1": 0.9386,
+        "rocAuc": 0.94
+      }
+    }
+  ]
+}

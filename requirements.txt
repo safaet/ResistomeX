@@ -1,0 +1,11 @@
+# R-Blend AMR Predictor — MVP dependencies
+# Versions pinned to the research notebook's environment
+# (Resistance_Gene_AMR_Prediction_v5, "Library Versions" cell) where listed.
+
+streamlit==1.39.0
+scikit-learn==1.6.1
+xgboost==3.2.0
+imbalanced-learn==0.14.1
+pandas==2.2.2
+numpy==2.0.2
+joblib==1.4.2
